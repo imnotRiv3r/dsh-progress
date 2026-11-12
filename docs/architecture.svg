@@ -1,0 +1,179 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="740" viewBox="0 0 1280 740" role="img" aria-label="dsh-progress data flow: download tools feed the Host sampler, a JSON state route, and the browser card">
+  <title>dsh-progress · data flow</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#08080f"/>
+      <stop offset="0.6" stop-color="#0b0b16"/>
+      <stop offset="1" stop-color="#100f1c"/>
+    </linearGradient>
+    <radialGradient id="haloHost" cx="0.44" cy="0.42" r="0.5">
+      <stop offset="0" stop-color="#6d4aff" stop-opacity="0.24"/>
+      <stop offset="1" stop-color="#6d4aff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="haloWeb" cx="0.8" cy="0.55" r="0.5">
+      <stop offset="0" stop-color="#22d3ee" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
+      <path d="M36 0H0V36" fill="none" stroke="#ffffff" stroke-opacity="0.045"/>
+    </pattern>
+    <filter id="boxShadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="16" stdDeviation="22" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0l10 5-10 5z" fill="#8b5cf6"/>
+    </marker>
+    <marker id="arrowCyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0l10 5-10 5z" fill="#22d3ee"/>
+    </marker>
+    <style>
+      .mono { font-family: "Cascadia Mono", "JetBrains Mono", Consolas, "SFMono-Regular", monospace; }
+      .sans { font-family: "Segoe UI Semibold", "Segoe UI", "Microsoft YaHei", system-ui, sans-serif; }
+      .label { font-family: "Cascadia Mono", "JetBrains Mono", Consolas, monospace; font-size: 10px; letter-spacing: 1.6px; fill: #8f8ba8; }
+      .h2 { font-family: "Segoe UI Semibold", "Segoe UI", "Microsoft YaHei", sans-serif; font-size: 13px; font-weight: 600; fill: #f0eefb; }
+      .body { font-family: "Cascadia Mono", "JetBrains Mono", Consolas, monospace; font-size: 11px; fill: #b9b5ce; }
+      .dim { font-family: "Cascadia Mono", "JetBrains Mono", Consolas, monospace; font-size: 10.5px; fill: #7f7b98; }
+    </style>
+  </defs>
+
+  <rect width="1280" height="740" fill="url(#bg)"/>
+  <rect width="1280" height="740" fill="url(#grid)"/>
+  <rect width="1280" height="740" fill="url(#haloHost)"/>
+  <rect width="1280" height="740" fill="url(#haloWeb)"/>
+
+  <!-- 标题 -->
+  <text x="64" y="60" class="sans" font-size="28" font-weight="700" fill="#ffffff">How it works</text>
+  <text x="64" y="86" class="mono" font-size="12" fill="#8f8ba8">两个进程 · 三条数据通路 · 一张卡片</text>
+
+  <!-- 图例 -->
+  <g transform="translate(880 44)">
+    <rect x="0" y="0" width="142" height="24" rx="6" fill="#7c5cff" fill-opacity="0.12" stroke="#7c5cff" stroke-opacity="0.4"/>
+    <text x="12" y="16" class="mono" font-size="10" fill="#c4b5fd">HOST / node</text>
+    <rect x="152" y="0" width="128" height="24" rx="6" fill="#22d3ee" fill-opacity="0.1" stroke="#22d3ee" stroke-opacity="0.35"/>
+    <text x="164" y="16" class="mono" font-size="10" fill="#7dd3fc">BROWSER / react</text>
+  </g>
+
+  <!-- 左列：下载工具 -->
+  <g>
+    <rect x="64" y="128" width="256" height="440" rx="16" fill="#12111c" fill-opacity="0.72" stroke="#ffffff" stroke-opacity="0.1" filter="url(#boxShadow)"/>
+    <text x="84" y="158" class="label">DOWNLOAD TOOLS</text>
+    <text x="84" y="176" class="dim">后台任务 · label = 整条命令</text>
+    <path d="M84 190h216" stroke="#ffffff" stroke-opacity="0.08"/>
+
+    <g class="body">
+      <text x="84" y="214">git clone --progress</text>
+      <text x="84" y="246">pip install / download</text>
+      <text x="84" y="278">uv sync / add</text>
+      <text x="84" y="310">npm install / pnpm add</text>
+      <text x="84" y="342">curl -# -L</text>
+      <text x="84" y="374">wget</text>
+      <text x="84" y="406">aria2c</text>
+      <text x="84" y="438">Invoke-WebRequest -OutFile</text>
+      <text x="84" y="470">docker pull</text>
+      <text x="84" y="502">winget / choco / scoop</text>
+      <text x="84" y="534">cargo / go mod download</text>
+    </g>
+    <g stroke="#ffffff" stroke-opacity="0.05">
+      <path d="M84 222h216M84 254h216M84 286h216M84 318h216M84 350h216M84 382h216M84 414h216M84 446h216M84 478h216M84 510h216"/>
+    </g>
+    <text x="84" y="556" class="dim">检测不到下载语义的命令不占卡片</text>
+  </g>
+
+  <!-- 中列：Host -->
+  <g>
+    <rect x="356" y="128" width="400" height="440" rx="16" fill="#141223" fill-opacity="0.86" stroke="#7c5cff" stroke-opacity="0.35" filter="url(#boxShadow)"/>
+    <text x="376" y="158" class="label" fill="#a78bfa">HOST · index.js</text>
+    <text x="684" y="158" class="mono" font-size="10" fill="#7f7b98" text-anchor="end">700 ms tick</text>
+
+    <rect x="376" y="172" width="360" height="76" rx="10" fill="#ffffff" fill-opacity="0.035" stroke="#ffffff" stroke-opacity="0.09"/>
+    <text x="392" y="194" class="h2">job 注册表</text>
+    <text x="392" y="214" class="body">ctx.jobs.events.subscribe({ owners: 'all' })</text>
+    <text x="392" y="232" class="dim">detectDownload(label) 判定是不是下载</text>
+
+    <path d="M556 248v20" stroke="#8b5cf6" stroke-width="1.4" marker-end="url(#arrow)"/>
+
+    <rect x="376" y="276" width="360" height="118" rx="10" fill="#ffffff" fill-opacity="0.035" stroke="#ffffff" stroke-opacity="0.09"/>
+    <text x="392" y="298" class="h2">DownloadTracker</text>
+    <text x="392" y="318" class="body">baseline: 目标目录 + %TEMP% 起点</text>
+    <text x="392" y="337" class="body">bytes = max(targetΔ, tempΔ)</text>
+    <text x="392" y="356" class="body">speed = 5 s 窗口 · 指数平滑 0.55/0.45</text>
+    <text x="392" y="375" class="dim">samples ≤ 24 · 只观察，不碰游标</text>
+
+    <path d="M556 394v20" stroke="#8b5cf6" stroke-width="1.4" marker-end="url(#arrow)"/>
+
+    <rect x="376" y="422" width="360" height="82" rx="10" fill="#ffffff" fill-opacity="0.035" stroke="#ffffff" stroke-opacity="0.09"/>
+    <text x="392" y="444" class="h2">DiskSampler · probe.js</text>
+    <text x="392" y="463" class="body">depth 3 · ≤ 4000 entries · 220 ms</text>
+    <text x="392" y="481" class="body">HEAD content-length · 3 redirects · 3 s</text>
+
+    <text x="376" y="530" class="mono" font-size="10.5" fill="#8f8ba8">snapshot() → { version: 1, now, tasks[] }</text>
+    <rect x="376" y="540" width="360" height="16" rx="4" fill="#7c5cff" fill-opacity="0.16"/>
+    <text x="392" y="552" class="mono" font-size="9.5" fill="#c4b5fd">GET /plugin/dsh-progress/state</text>
+  </g>
+
+  <!-- 右列：浏览器 -->
+  <g>
+    <rect x="792" y="128" width="424" height="440" rx="16" fill="#111822" fill-opacity="0.86" stroke="#22d3ee" stroke-opacity="0.28" filter="url(#boxShadow)"/>
+    <text x="812" y="158" class="label" fill="#7dd3fc">BROWSER · client.js</text>
+    <text x="1196" y="158" class="mono" font-size="10" fill="#7f7b98" text-anchor="end">600 ms poll</text>
+
+    <rect x="812" y="172" width="384" height="76" rx="10" fill="#ffffff" fill-opacity="0.03" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text x="828" y="194" class="h2">轮询状态</text>
+    <text x="828" y="214" class="body">fetch(STATE_PATH) · cache: 'no-store'</text>
+    <text x="828" y="232" class="dim">document.hidden → 暂停，页面关闭自动停</text>
+
+    <path d="M1004 248v18" stroke="#22d3ee" stroke-width="1.2" marker-end="url(#arrowCyan)" opacity="0.8"/>
+
+    <rect x="812" y="274" width="384" height="118" rx="10" fill="#ffffff" fill-opacity="0.03" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text x="828" y="296" class="h2">jobs.observe(sessionId, jobId)</text>
+    <text x="828" y="316" class="body">MATCHERS: aria2 · git · docker · pip</text>
+    <text x="828" y="335" class="body">　　　　　wget · curl -# · 通用 %</text>
+    <text x="828" y="354" class="body">git 跳过 Resolving / Counting 本地阶段</text>
+    <text x="828" y="373" class="dim">取输出尾部 16 KiB · 最多回看 60 行</text>
+
+    <path d="M1004 392v18" stroke="#22d3ee" stroke-width="1.2" marker-end="url(#arrowCyan)" opacity="0.8"/>
+
+    <rect x="812" y="418" width="384" height="86" rx="10" fill="#ffffff" fill-opacity="0.03" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text x="828" y="440" class="h2">present() 合成</text>
+    <text x="828" y="460" class="body">downloaded = max(output, disk)</text>
+    <text x="828" y="479" class="body">percent / ETA：输出优先，否则自算</text>
+
+    <text x="812" y="532" class="mono" font-size="10.5" fill="#8f8ba8">ReactDOM.createPortal(cards, document.body)</text>
+    <rect x="812" y="542" width="384" height="16" rx="4" fill="#22d3ee" fill-opacity="0.12"/>
+    <text x="828" y="554" class="mono" font-size="9" fill="#7dd3fc">fixed · right/bottom 18 · z-index 2147483000</text>
+  </g>
+
+  <!-- 连接箭头 -->
+  <g>
+    <path d="M320 300h32" stroke="#8b5cf6" stroke-width="1.6" marker-end="url(#arrow)"/>
+    <text x="326" y="288" class="mono" font-size="9.5" fill="#a78bfa" text-anchor="middle">events</text>
+
+    <path d="M756 300h32" stroke="#8b5cf6" stroke-width="1.6" marker-end="url(#arrow)"/>
+    <text x="772" y="288" class="mono" font-size="9.5" fill="#a78bfa" text-anchor="middle">JSON</text>
+
+    <!-- job 输出流：从工具列顶部绕到浏览器列 -->
+    <path d="M300 128v-18h750v18" stroke="#22d3ee" stroke-opacity="0.55" stroke-width="1.4" stroke-dasharray="5 5" fill="none" marker-end="url(#arrowCyan)"/>
+    <text x="642" y="102" class="mono" font-size="10" fill="#7dd3fc" text-anchor="middle">job output stream · 仅本会话任务可见</text>
+  </g>
+
+  <!-- 底部：常量与优先级 -->
+  <g>
+    <path d="M64 604h1152" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text x="64" y="630" class="label">CONSTANTS</text>
+    <g class="mono" font-size="10.5" fill="#b9b5ce">
+      <text x="64" y="654">host tick</text><text x="150" y="654" fill="#c4b5fd">700 ms</text>
+      <text x="240" y="654">browser poll</text><text x="350" y="654" fill="#c4b5fd">600 ms</text>
+      <text x="440" y="654">fade-out</text><text x="520" y="654" fill="#c4b5fd">2.6 s</text>
+      <text x="600" y="654">settled TTL</text><text x="700" y="654" fill="#c4b5fd">12 s</text>
+      <text x="776" y="654">speed window</text><text x="886" y="654" fill="#c4b5fd">5 s</text>
+      <text x="950" y="654">max cards</text><text x="1044" y="654" fill="#c4b5fd">8</text>
+    </g>
+    <text x="64" y="686" class="label">ORDER OF TRUTH</text>
+    <text x="64" y="710" class="mono" font-size="10.5" fill="#b9b5ce">下载器自报的进度行</text>
+    <text x="240" y="710" class="mono" font-size="10.5" fill="#6f6c86">→</text>
+    <text x="266" y="710" class="mono" font-size="10.5" fill="#b9b5ce">磁盘增量 ÷ HEAD 总量</text>
+    <text x="452" y="710" class="mono" font-size="10.5" fill="#6f6c86">→</text>
+    <text x="478" y="710" class="mono" font-size="10.5" fill="#b9b5ce">都没有：条纹不确定态</text>
+    <text x="1216" y="710" class="mono" font-size="10" fill="#6f6c86" text-anchor="end">dsh-progress 0.1.0</text>
+  </g>
+</svg>
