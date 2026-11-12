@@ -1,6 +1,6 @@
 English | [中文](README.zh.md)
 
-# dsh-dl-progress
+# dsh-progress
 
 A [DeepSeek Harness](https://github.com/deepseek-ai) plugin that shows a live download card in the bottom-right corner of the UI while a background job is downloading: progress bar, bytes written, current speed, and ETA.
 
@@ -59,11 +59,11 @@ The portal is required: the slot container carries `transform` / `overflow`, so 
 
 ```powershell
 # Is the Host half alive? `hits` keeps growing once the browser half attaches.
-Invoke-RestMethod http://127.0.0.1:2482/plugin/dl-progress/state
-# {"version":1,"now":...,"tasks":[...],"poll":{"hits":123,"lastHitAt":...}}
+Invoke-RestMethod http://127.0.0.1:2482/plugin/dsh-progress/state
+# {"version":1,"now":...,"tasks":[...],"poll":{"hits":123,"lastHitAt":...,"build":"0.1.0"}}
 ```
 
-`poll.hits` counts requests to the state route. If it does not grow, the browser half is not loaded (usually the page was not refreshed). If it grows but no card appears, the problem is mounting, not data.
+`poll.hits` counts requests to the state route. If it does not grow, the browser half is not loaded (usually the page was not refreshed). If it grows but no card appears, the problem is mounting, not data. `poll.build` names the Host build that answered.
 
 Trigger a visible download:
 
@@ -80,6 +80,8 @@ curl.exe -L -# --limit-rate 300k -o "$env:TEMP\probe.bin" `
 
 With `guidePrompt` enabled (the default) the plugin adds one short system-prompt section asking the model to run downloads with `run_in_background` and progress-friendly flags. That section is what determines how often you actually see cards.
 
+Shell variables inside the command are expanded when possible — `$dir="D:\dl"; curl -o "$dir\a.zip" ...` still resolves to the real target. A variable that cannot be resolved is skipped rather than guessed, so a mis-read path never produces a wrong progress curve.
+
 ## Install
 
 Installed the same way as any Harness profile plugin.
@@ -87,15 +89,15 @@ Installed the same way as any Harness profile plugin.
 1. Link this directory into the profile's `node_modules`:
 
    ```powershell
-   cmd /c mklink /J "$env:USERPROFILE\.dsh\profiles\desktop\node_modules\dsh-dl-progress" "E:\dshWorkspace\dsh-dl-progress"
+   cmd /c mklink /J "$env:USERPROFILE\.dsh\profiles\desktop\node_modules\dsh-progress" "E:\dshWorkspace\dsh-progress"
    ```
 
 2. Add the dependency and bundle to the profile's `package.json`:
 
    ```json
    {
-     "dependencies": { "dsh-dl-progress": "link:E:/dshWorkspace/dsh-dl-progress" },
-     "dsh": { "profile": { "bundles": ["...", "dsh-dl-progress"] } }
+     "dependencies": { "dsh-progress": "link:E:/dshWorkspace/dsh-progress" },
+     "dsh": { "profile": { "bundles": ["...", "dsh-progress"] } }
    }
    ```
 
@@ -103,11 +105,11 @@ Installed the same way as any Harness profile plugin.
 
 ## Config
 
-The row id is `dl-progress`; edit it in the profile's `cordis.patch.yml`:
+The row id is `progress`; edit it in the profile's `cordis.patch.yml`:
 
 ```yaml
-- id: dl-progress
-  name: dsh-dl-progress
+- id: progress
+  name: dsh-progress
   config:
     enabled: true
     guidePrompt: true

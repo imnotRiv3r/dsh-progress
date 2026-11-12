@@ -1,6 +1,6 @@
 [English](README.md) | 中文
 
-# dsh-dl-progress
+# dsh-progress
 
 DeepSeek Harness 插件：后台任务在下载时，在界面右下角显示一张实时进度卡片（进度条 / 已下载 / 速度 / 剩余时间）。
 
@@ -59,11 +59,11 @@ DeepSeek Harness 插件：后台任务在下载时，在界面右下角显示一
 
 ```powershell
 # Host 半是否在跑：hits 会在浏览器半挂载后持续增长
-Invoke-RestMethod http://127.0.0.1:2482/plugin/dl-progress/state
-# {"version":1,"now":...,"tasks":[...],"poll":{"hits":123,"lastHitAt":...}}
+Invoke-RestMethod http://127.0.0.1:2482/plugin/dsh-progress/state
+# {"version":1,"now":...,"tasks":[...],"poll":{"hits":123,"lastHitAt":...,"build":"0.1.0"}}
 ```
 
-`poll.hits` 是状态路由被浏览器请求的次数。它不涨说明浏览器半没挂上（通常是页面没刷新）；它在涨但界面没卡片，就该检查挂载位置而不是数据。
+`poll.hits` 是状态路由被浏览器请求的次数。它不涨说明浏览器半没挂上（通常是页面没刷新）；它在涨但界面没卡片，就该检查挂载位置而不是数据。`poll.build` 是回答请求的 Host 构建标记。
 
 触发一次可观察的下载：
 
@@ -79,6 +79,8 @@ curl.exe -L -# --limit-rate 300k -o "$env:TEMP\probe.bin" https://mirrors.aliyun
 
 插件开启 `guidePrompt` 时，会往系统提示词里加一小段：下载类命令优先用 `run_in_background`，并尽量带进度友好参数。这决定你实际能看到多少张卡片。
 
+命令里的 shell 变量会被展开：`$dir="D:\dl"; curl -o "$dir\a.zip" ...` 照样能定位到真实落点。展开不了的变量直接跳过而不是猜一个路径，所以不会因为读错路径画出错误的进度曲线。
+
 ## 安装
 
 插件按 Harness 的 profile 方式安装（和本仓库里的 `dsh-job-notify` 一样）。
@@ -88,15 +90,15 @@ curl.exe -L -# --limit-rate 300k -o "$env:TEMP\probe.bin" https://mirrors.aliyun
 1. 把本目录链接进 profile 的 `node_modules`：
 
    ```powershell
-   cmd /c mklink /J "C:\Users\<你>\.dsh\profiles\desktop\node_modules\dsh-dl-progress" "E:\dshWorkspace\dsh-dl-progress"
+   cmd /c mklink /J "C:\Users\<你>\.dsh\profiles\desktop\node_modules\dsh-progress" "E:\dshWorkspace\dsh-progress"
    ```
 
 2. 在 profile 的 `package.json` 加依赖与 bundle：
 
    ```json
    {
-     "dependencies": { "dsh-dl-progress": "link:E:/dshWorkspace/dsh-dl-progress" },
-     "dsh": { "profile": { "bundles": ["...", "dsh-dl-progress"] } }
+     "dependencies": { "dsh-progress": "link:E:/dshWorkspace/dsh-progress" },
+     "dsh": { "profile": { "bundles": ["...", "dsh-progress"] } }
    }
    ```
 
@@ -105,17 +107,17 @@ curl.exe -L -# --limit-rate 300k -o "$env:TEMP\probe.bin" https://mirrors.aliyun
 验证 Host 半：
 
 ```powershell
-Invoke-RestMethod http://127.0.0.1:2482/plugin/dl-progress/state
+Invoke-RestMethod http://127.0.0.1:2482/plugin/dsh-progress/state
 # {"version":1,"now":...,"tasks":[]}
 ```
 
 ## 配置
 
-行 id 是 `dl-progress`，在 profile 的 `cordis.patch.yml` 里改：
+行 id 是 `progress`，在 profile 的 `cordis.patch.yml` 里改：
 
 ```yaml
-- id: dl-progress
-  name: dsh-dl-progress
+- id: progress
+  name: dsh-progress
   config:
     enabled: true
     guidePrompt: true

@@ -36,7 +36,7 @@ const notDownload = [
   'git status',
   'git fetch --all'.replace('fetch', 'status'),
   'curl --version',
-  'Start-Sleep 1; Invoke-WebRequest -Uri "http://127.0.0.1:2482/plugin/dl-progress/state" -UseBasicParsing',
+  'Start-Sleep 1; Invoke-WebRequest -Uri "http://127.0.0.1:2482/plugin/dsh-progress/state" -UseBasicParsing',
   'npm run build',
   'python -m pip list',
 ]
@@ -49,6 +49,15 @@ const gitTargets = detectDownload('git clone https://github.com/a/b "E:\\ws\\b"'
 assert.ok(gitTargets.includes('E:\\ws\\b\\.git'), 'git 应采样 .git')
 const pipTargets = detectDownload('python -m pip download numpy -d E:\\ws', 'E:\\ws').targets
 assert.deepEqual(pipTargets, [], 'pip 不应把 -d 目录当作采样目标')
+
+// 命令内变量必须展开，否则采样永远定位不到落点
+const variableLabel =
+  '$d="E:\\ws\\dl"; New-Item -ItemType Directory -Force -Path $d | Out-Null; curl.exe -s -L -o "$d\\optuna.whl" "https://mirror.example/x/numpy.whl"'
+const variableTargets = detectDownload(variableLabel, 'E:\\ws').targets
+assert.ok(variableTargets.includes('E:\\ws\\dl\\optuna.whl'), '应展开 $d 变量定位到落点')
+// 引用无法解析的变量时宁可不采样，也不猜错路径
+const unknownTargets = detectDownload('curl -o "$nope\\a.zip" https://mirror.example/a.zip', 'E:\\ws').targets
+assert.ok(!unknownTargets.some(target => target.includes('$')), '无法解析的变量不应产生错误路径')
 
 // ---------- 2. 总量探测的输入校验（不联网：非法输入直接就返回 undefined） ----------
 assert.equal(await probeContentLength('not-a-url'), undefined)
@@ -140,7 +149,7 @@ exported.apply({
   jobs: { state: {}, observe: () => () => {} },
 })
 assert.equal(registered.options.name, 'shell.overlay')
-assert.equal(registered.options.id, 'dsh-dl-progress')
+assert.equal(registered.options.id, 'dsh-progress')
 assert.equal(registered.Component.name, 'DownloadCards')
 
 console.log('smoke: 全部通过')

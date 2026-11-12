@@ -1,5 +1,5 @@
 {
-  "name": "dsh-dl-progress",
+  "name": "dsh-progress",
   "version": "0.1.0",
   "type": "module",
   "description": "下载进度卡片：识别 Harness 后台的下载类命令（git clone / pip / npm / curl / wget / aria2 / Invoke-WebRequest / winget 等），采样磁盘字节给出实时速度与进度，并在界面右下角以悬浮卡片展示。",
@@ -7,11 +7,11 @@
   "author": "imnotRiv3r",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/imnotRiv3r/dsh-dl-progress.git"
+    "url": "git+https://github.com/imnotRiv3r/dsh-progress.git"
   },
-  "homepage": "https://github.com/imnotRiv3r/dsh-dl-progress#readme",
+  "homepage": "https://github.com/imnotRiv3r/dsh-progress#readme",
   "bugs": {
-    "url": "https://github.com/imnotRiv3r/dsh-dl-progress/issues"
+    "url": "https://github.com/imnotRiv3r/dsh-progress/issues"
   },
   "keywords": [
     "deepseek-harness",

@@ -1,19 +1,19 @@
 /**
  * 浏览器半：右下角的下载进度卡片。
  *
- * 数据有两路：Host 的 `/plugin/dl-progress/state` 给出「哪些后台任务是下载、
+ * 数据有两路：Host 的 `/plugin/dsh-progress/state` 给出「哪些后台任务是下载、
  * 已经写了多少字节、当前速度」；job 输出流给出下载器自己打的百分比（git、
  * aria2、curl -# 等）。两路合起来：有百分比就用百分比，没有就用字节曲线。
  *
- * @module dsh-dl-progress/client
+ * @module dsh-progress/client
  */
 window.__ModuleLoader__.load({
-  id: 'dsh-dl-progress',
+  id: 'dsh-progress',
   factory(require) {
     const React = require('react')
     const h = React.createElement
 
-    const STATE_PATH = '/plugin/dl-progress/state'
+    const STATE_PATH = '/plugin/dsh-progress/state'
     const POLL_MS = 600
     const FADE_MS = 2600
     const MIN_LIVE_MS = 500
@@ -54,7 +54,7 @@ window.__ModuleLoader__.load({
         boxShadow: '0 18px 40px -18px rgba(0, 0, 0, .55), 0 2px 8px -2px rgba(0, 0, 0, .25)',
         backdropFilter: 'blur(12px) saturate(140%)',
         padding: '11px 12px 12px',
-        animation: 'dsh-dl-progress-in 180ms ease-out both',
+        animation: 'dsh-progress-in 180ms ease-out both',
         fontFamily: 'inherit',
       },
       head: { display: 'flex', alignItems: 'center', gap: 9, marginBottom: 9 },
@@ -127,7 +127,7 @@ window.__ModuleLoader__.load({
         backgroundImage:
           'repeating-linear-gradient(115deg, color-mix(in srgb, var(--dsw-alias-brand-primary) 78%, transparent) 0 12px, color-mix(in srgb, var(--dsw-alias-brand-primary) 30%, transparent) 12px 24px)',
         backgroundSize: '24px 100%',
-        animation: 'dsh-dl-progress-stripes 900ms linear infinite',
+        animation: 'dsh-progress-stripes 900ms linear infinite',
       },
       meta: {
         display: 'flex',
@@ -149,8 +149,8 @@ window.__ModuleLoader__.load({
         wordBreak: 'break-word',
       },
       keyframes: [
-        '@keyframes dsh-dl-progress-in{from{opacity:0;transform:translateY(10px) scale(.99)}to{opacity:1;transform:none}}',
-        '@keyframes dsh-dl-progress-stripes{from{background-position:0 0}to{background-position:24px 0}}',
+        '@keyframes dsh-progress-in{from{opacity:0;transform:translateY(10px) scale(.99)}to{opacity:1;transform:none}}',
+        '@keyframes dsh-progress-stripes{from{background-position:0 0}to{background-position:24px 0}}',
       ].join(''),
     }
 
@@ -460,7 +460,7 @@ window.__ModuleLoader__.load({
 
       // 注入一次动画关键帧。
       React.useEffect(() => {
-        const id = 'dsh-dl-progress-style'
+        const id = 'dsh-progress-style'
         if (document.getElementById(id) !== null) return
         const style = document.createElement('style')
         style.id = id
@@ -534,7 +534,7 @@ window.__ModuleLoader__.load({
       }
       if (cards.length === 0) return null
       // 挂到 body：插槽容器上的 transform / overflow 会让 position: fixed 失效或被裁剪。
-      const panel = h('div', { style: S.wrap, className: 'dsh-dl-progress' }, cards)
+      const panel = h('div', { style: S.wrap, className: 'dsh-progress' }, cards)
       if (ReactDOM !== null) return ReactDOM.createPortal(panel, document.body)
       return panel
     }
@@ -670,7 +670,7 @@ window.__ModuleLoader__.load({
           ctx.slots.register(
             {
               name: 'shell.overlay',
-              id: 'dsh-dl-progress',
+              id: 'dsh-progress',
               order: 60,
               inject: () => ({ jobs: ctx.jobs }),
             },
