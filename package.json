@@ -1,0 +1,66 @@
+{
+  "name": "dsh-dl-progress",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "下载进度卡片：识别 Harness 后台的下载类命令（git clone / pip / npm / curl / wget / aria2 / Invoke-WebRequest / winget 等），采样磁盘字节给出实时速度与进度，并在界面右下角以悬浮卡片展示。",
+  "license": "MIT",
+  "author": "imnotRiv3r",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imnotRiv3r/dsh-dl-progress.git"
+  },
+  "homepage": "https://github.com/imnotRiv3r/dsh-dl-progress#readme",
+  "bugs": {
+    "url": "https://github.com/imnotRiv3r/dsh-dl-progress/issues"
+  },
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "cordis",
+    "download",
+    "progress"
+  ],
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "lib",
+    "test",
+    "docs",
+    "cordis.patch.yml",
+    "README.md",
+    "README.zh.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node test/smoke.mjs",
+    "check": "node --check index.js && node --check client.js && node --check lib/detect.js && node --check lib/sampler.js && node --check lib/tracker.js"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-slots",
+        "@deepseek-ai/dsh-client-ui-layout",
+        "@deepseek-ai/dsh-api-job-controller",
+        "@deepseek-ai/dsh-client-connection"
+      ]
+    },
+    "compatibility": {
+      "dsh": ">=0.2.0-rc.1 <0.3.0-0"
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/schemastery": ">=3.18.0 <4.0.0"
+  }
+}
