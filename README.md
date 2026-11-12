@@ -4,9 +4,9 @@ English | [中文](README.zh.md)
 
 A [DeepSeek Harness](https://github.com/deepseek-ai) plugin that shows a live download card in the bottom-right corner of the UI while a background job is downloading: progress bar, bytes written, current speed, and ETA.
 
-![Download progress card](docs/card-percent.png)
+![Download progress card](docs/card-fill.png)
 
-That screenshot is a real run: a **silent** download (`curl -s`, which prints nothing at all) still shows `4.14 MB / 12.9 MB`, `32%`, and `148 KB/s`.
+A **silent** download (`curl -s`, which prints nothing at all) still shows `4.14 MB / 12.9 MB`, `32%`, and `148 KB/s`: the total comes from a HEAD probe, the rest from disk sampling.
 
 ```
 ┌──────────────────────────────────────┐
@@ -28,9 +28,9 @@ That is a deliberate fallback, not a failure. A total comes from one of three so
 2. **A HEAD request** — for a single file URL the plugin reads `content-length`; this is what makes silent downloads show a percentage.
 3. **Neither** — the card falls back to stripes.
 
-![Real percentage from curl](docs/card-curl.png)
+![Indeterminate progress card](docs/card-stripes.png)
 
-`curl -#` reports percentages on its own (the `15% · curl` above), and so does `git clone --progress`. Stripes remain only for downloads that have no single total: `npm install` (dozens of packages), commands with multiple URLs, and servers that refuse HEAD.
+When no total exists — `npm install` (dozens of packages), commands with multiple URLs, servers that refuse HEAD — the bar falls back to moving stripes and reports bytes written plus speed instead of a percentage. Everything else (a single file URL, `curl -#`, `git clone --progress`, `aria2c`) shows a real percentage.
 
 ## How it works
 

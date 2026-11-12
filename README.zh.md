@@ -4,9 +4,9 @@
 
 DeepSeek Harness 插件：后台任务在下载时，在界面右下角显示一张实时进度卡片（进度条 / 已下载 / 速度 / 剩余时间）。
 
-![下载进度卡片](docs/card-percent.png)
+![下载进度卡片](docs/card-fill.png)
 
-上图为真实运行时的截图：静默下载（`curl -s`，自身不输出任何进度）仍显示 `4.14 MB / 12.9 MB`、`32%`、`148 KB/s`。
+静默下载（`curl -s`，自身不输出任何进度）也能显示 `4.14 MB / 12.9 MB`、`32%`、`148 KB/s`：总量来自 HEAD 探测，其余来自磁盘采样。
 
 ```
 ┌──────────────────────────────────────┐
@@ -28,9 +28,9 @@ DeepSeek Harness 插件：后台任务在下载时，在界面右下角显示一
 2. 对单文件 URL 发一次 HEAD 读 `content-length`（静默 `curl -s` 也靠这条）；
 3. 都没有 → 条纹。
 
-![真实百分比](docs/card-curl.png)
+![条纹（不确定态）](docs/card-stripes.png)
 
-`curl -#` 自己会报百分比（上图 `15% · curl`）；`git clone --progress` 同理。真正只能条纹的是**没有单一总量**的下载：`npm install`（多个包）、多 URL 批量下载、以及服务器不支持 HEAD 的地址。
+没有单一总量的下载只能条纹：`npm install`（多个包）、多 URL 批量下载、服务器不支持 HEAD 的地址。其余场景——单文件 URL、`curl -#`、`git clone --progress`、`aria2c`——都会显示真实百分比。
 
 ## 它怎么工作
 

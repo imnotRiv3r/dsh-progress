@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>dsh-progress · 有总量</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 16px;
+    background: transparent;
+    font-family: "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
+  }
+
+  .card {
+    box-sizing: border-box;
+    width: 366px;
+    padding: 11px 12px 12px;
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 14px;
+    background: #2c2c2e;
+    box-shadow: none;
+  }
+
+  .head {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 9px;
+  }
+
+  .badge {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    text-transform: uppercase;
+    color: #fff;
+    background: linear-gradient(150deg, #f9fafb, #7c5cff);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .28);
+  }
+
+  .titles {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .name {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 18px;
+    color: #f9fafb;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .sub {
+    font-size: 11px;
+    line-height: 15px;
+    color: #adb2b8;
+  }
+
+  .close {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: #81858c;
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  .track {
+    height: 6px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, .06);
+  }
+
+  .fill {
+    height: 100%;
+    width: 32%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #f9fafb, #c7bdfd);
+  }
+
+  .meta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 8px;
+    font-size: 11px;
+    line-height: 15px;
+    color: #cfd3d6;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .meta .right { flex: none; color: #adb2b8; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="head">
+      <div class="badge">c</div>
+      <div class="titles">
+        <div class="name">numpy-2.2.6-cp310-cp310-win_amd64.whl</div>
+        <div class="sub">4.14 MB / 12.9 MB</div>
+      </div>
+      <div class="close">✕</div>
+    </div>
+    <div class="track"><div class="fill"></div></div>
+    <div class="meta">
+      <span>32% · curl</span>
+      <span class="right">148 KB/s · 剩 59s · 40s</span>
+    </div>
+  </div>
+</body>
+</html>
