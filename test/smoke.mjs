@@ -36,7 +36,7 @@ const notDownload = [
   'git status',
   'git fetch --all'.replace('fetch', 'status'),
   'curl --version',
-  'Start-Sleep 1; Invoke-WebRequest -Uri "http://127.0.0.1:2482/plugin/dsh-progress/state" -UseBasicParsing',
+  'Start-Sleep 1; Invoke-WebRequest -Uri "http://127.0.0.1:2482/plugin/dsh-download-dock/state" -UseBasicParsing',
   'npm run build',
   'python -m pip list',
 ]
@@ -149,7 +149,7 @@ exported.apply({
   jobs: { state: {}, observe: () => () => {} },
 })
 assert.equal(registered.options.name, 'shell.overlay')
-assert.equal(registered.options.id, 'dsh-progress')
+assert.equal(registered.options.id, 'dsh-download-dock')
 assert.equal(registered.Component.name, 'DownloadCards')
 
 console.log('smoke: 全部通过')

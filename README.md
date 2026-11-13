@@ -1,7 +1,7 @@
 <p align="right"><b>English</b> · <a href="README.zh.md">中文</a></p>
 
 <p align="center">
-  <img src="docs/banner.svg" width="100%" alt="dsh-progress — live download cards in the corner of the DeepSeek Harness UI">
+  <img src="docs/banner.svg" width="100%" alt="dsh-download-dock — live download cards in the corner of the DeepSeek Harness UI">
 </p>
 
 <p align="center">
@@ -14,7 +14,7 @@
 
 <p align="center">
   <b>A background download shouldn't be one word: "Running".</b><br>
-  <sub>dsh-progress grows a live card in the bottom-right corner: file, progress, bytes, speed and ETA.</sub>
+  <sub>dsh-download-dock grows a live card in the bottom-right corner: file, progress, bytes, speed and ETA.</sub>
 </p>
 
 ---
@@ -31,7 +31,7 @@
 > You start a 2 GB model download in Harness and it goes to the background. The corner of the UI says nothing; the job row says "Running".
 > You can't tell whether it's downloading at full speed, stuck on DNS, or already dead.
 >
-> dsh-progress turns those forty seconds into one card: **file name, 32%, 4.14 MB / 12.9 MB, 148 KB/s, 59s left**.
+> dsh-download-dock turns those forty seconds into one card: **file name, 32%, 4.14 MB / 12.9 MB, 148 KB/s, 59s left**.
 > No second window, no wrapped commands, no takeover — it observes and draws the result where you are already looking.
 
 ## Contents
@@ -59,7 +59,7 @@
 
 Harness pushes download commands into background jobs (`run_in_background: true`) so they don't block the turn. The cost: the UI keeps a single status row, and the next real signal is a completion notice a dozen seconds later. Everything in between is invisible.
 
-dsh-progress fills that gap, and it **only observes**:
+dsh-download-dock fills that gap, and it **only observes**:
 
 | It does | It doesn't |
 |---|---|
@@ -77,7 +77,7 @@ A card is 366 px wide (clamped to `100vw - 36px` on narrow screens), fixed 18 px
 | Part | Content | Notes |
 |---|---|---|
 | Tool badge | `git` / `py` / `npm` / `a2` / `c` / `w` / `web` / `app` / `rs` / `go` / `dk` | Derived from the detected tool |
-| Title | File, repo or package name | e.g. `numpy-2.2.6-cp310-win_amd64.whl`, `dsh-progress`, `lodash`; falls back to the first 60 characters of the command |
+| Title | File, repo or package name | e.g. `numpy-2.2.6-cp310-win_amd64.whl`, `dsh-download-dock`, `lodash`; falls back to the first 60 characters of the command |
 | Subtitle | Byte progress or status text | `4.14 MB / 12.9 MB`, `12.4 MB written`, `Completed`, `Download failed`, `Cancelled`, `Stopping…` |
 | Bar | Filled bar or moving stripes | Filled when the total is known; stripes otherwise (see [Stripes are not a bug](#stripes-are-not-a-bug)) |
 | Bottom left | Percentage + tool | The tool alone means indeterminate |
@@ -101,7 +101,7 @@ The `✕` button only removes the card from the current page — **it never stop
 The plugin is split into two halves that talk over a single read-only JSON route:
 
 <p align="center">
-  <img src="docs/architecture.svg" width="100%" alt="dsh-progress data flow: download tools → Host sampling → JSON state → browser card">
+  <img src="docs/architecture.svg" width="100%" alt="dsh-download-dock data flow: download tools → Host sampling → JSON state → browser card">
 </p>
 
 | Half | Files | Runtime | Responsibility |
@@ -132,7 +132,7 @@ flowchart LR
 4. If the command contains exactly one HTTP(S) URL, the Host sends a `HEAD` request and reads `content-length` as the total.
 5. Every 700 ms the Host samples only the **delta**, so pre-existing files never count as part of this download.
 6. After the job ends, the Host keeps returning it for 12 seconds (`settledTtlMs`) so the browser can render the final state.
-7. The browser fetches `/plugin/dsh-progress/state` every 600 ms and pauses while the page is hidden.
+7. The browser fetches `/plugin/dsh-download-dock/state` every 600 ms and pauses while the page is hidden.
 8. The browser merges disk bytes with the downloader's own progress lines, renders the card, and fades finished cards out after 2.6 seconds.
 
 ## Three data sources
@@ -275,10 +275,10 @@ Prerequisites:
 ### Option A: link a local checkout (development / hacking)
 
 ```powershell
-git clone https://github.com/imnotRiv3r/dsh-progress.git E:\dshWorkspace\dsh-progress
+git clone https://github.com/imnotRiv3r/dsh-download-dock.git E:\dshWorkspace\dsh-download-dock
 
 # Link it into the profile's node_modules (a Windows directory junction; usually no admin needed)
-cmd /c mklink /J "$env:USERPROFILE\.dsh\profiles\desktop\node_modules\dsh-progress" "E:\dshWorkspace\dsh-progress"
+cmd /c mklink /J "$env:USERPROFILE\.dsh\profiles\desktop\node_modules\dsh-download-dock" "E:\dshWorkspace\dsh-download-dock"
 ```
 
 Then add the dependency and the bundle to the profile's `package.json`:
@@ -286,11 +286,11 @@ Then add the dependency and the bundle to the profile's `package.json`:
 ```json
 {
   "dependencies": {
-    "dsh-progress": "link:E:/dshWorkspace/dsh-progress"
+    "dsh-download-dock": "link:E:/dshWorkspace/dsh-download-dock"
   },
   "dsh": {
     "profile": {
-      "bundles": ["...", "dsh-progress"]
+      "bundles": ["...", "dsh-download-dock"]
     }
   }
 }
@@ -300,10 +300,10 @@ Then add the dependency and the bundle to the profile's `package.json`:
 
 ```powershell
 cd "$env:USERPROFILE\.dsh\profiles\desktop"
-npm install --save "github:imnotRiv3r/dsh-progress"
+npm install --save "github:imnotRiv3r/dsh-download-dock"
 ```
 
-Then add `"dsh-progress"` to `dsh.profile.bundles` in the same `package.json`. The repo has no build step — `exports` points straight at the source, so it works right after install.
+Then add `"dsh-download-dock"` to `dsh.profile.bundles` in the same `package.json`. The repo has no build step — `exports` points straight at the source, so it works right after install.
 
 ### What reloads when
 
@@ -317,7 +317,7 @@ Then add `"dsh-progress"` to `dsh.profile.bundles` in the same `package.json`. T
 
 ```powershell
 # Is the Host half alive? `hits` grows once the browser half attaches.
-Invoke-RestMethod http://127.0.0.1:2482/plugin/dsh-progress/state
+Invoke-RestMethod http://127.0.0.1:2482/plugin/dsh-download-dock/state
 ```
 
 A healthy response looks like:
@@ -337,11 +337,11 @@ curl.exe -L -# --limit-rate 300k -o "$env:TEMP\probe.bin" `
 
 ## Config
 
-The row id is `progress`; edit it in the profile's `cordis.patch.yml`:
+The row id is `download-dock`; edit it in the profile's `cordis.patch.yml`:
 
 ```yaml
-- id: progress
-  name: dsh-progress
+- id: download-dock
+  name: dsh-download-dock
   config:
     enabled: true
     guidePrompt: true
@@ -368,7 +368,7 @@ With `guidePrompt` on, the plugin injects a short system-prompt section: **for d
 
 ## The state route
 
-`GET /plugin/dsh-progress/state` returns a read-only JSON snapshot (`cache-control: no-store`):
+`GET /plugin/dsh-download-dock/state` returns a read-only JSON snapshot (`cache-control: no-store`):
 
 ```json
 {
@@ -423,7 +423,7 @@ For debugging, add `?diag=...` to the URL: the value is truncated to 4000 charac
 |---|---|---|
 | No card at all | Not a background job | Use `run_in_background: true`; foreground downloads never show a card |
 | | Command doesn't look like a download | Check it against the list above; `npm run build` and `git status` don't count |
-| | Browser half not loaded | Refresh the page; confirm `dsh-progress` is in `bundles` |
+| | Browser half not loaded | Refresh the page; confirm `dsh-download-dock` is in `bundles` |
 | | Plugin disabled | Check `enabled`; look for `disabled by config` in the Host log |
 | | `webServer` not ready | The plugin retries every 500 ms, 20 times; after that you'll see `webServer never became available` |
 | Card appears but bytes stay at 0 | Download doesn't hit disk, or lands somewhere unresolved | Use an explicit `-o` / `-OutFile`; make sure `$var` paths expand to real absolute paths |
@@ -460,8 +460,8 @@ Three-state diagnosis with `poll.hits`:
 ## Development
 
 ```powershell
-git clone https://github.com/imnotRiv3r/dsh-progress.git
-cd dsh-progress
+git clone https://github.com/imnotRiv3r/dsh-download-dock.git
+cd dsh-download-dock
 
 node test/smoke.mjs   # detection, parsing, merging, browser-half registration — fully offline
 npm run check         # node --check on every source file

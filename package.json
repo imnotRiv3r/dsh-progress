@@ -1,17 +1,18 @@
 {
-  "name": "dsh-progress",
+  "name": "dsh-download-dock",
   "version": "0.1.0",
   "type": "module",
-  "description": "下载进度卡片：识别 Harness 后台的下载类命令（git clone / pip / npm / curl / wget / aria2 / Invoke-WebRequest / winget 等），采样磁盘字节给出实时速度与进度，并在界面右下角以悬浮卡片展示。",
+  "description": "下载坞：在 DeepSeek Harness 界面右下角显示后台下载的实时进度卡片（字节、速度、剩余时间），覆盖 git clone / pip / npm / curl / aria2 / winget 等后台下载。",
+  "icon": "icon.svg",
   "license": "MIT",
   "author": "imnotRiv3r",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/imnotRiv3r/dsh-progress.git"
+    "url": "git+https://github.com/imnotRiv3r/dsh-download-dock.git"
   },
-  "homepage": "https://github.com/imnotRiv3r/dsh-progress#readme",
+  "homepage": "https://github.com/imnotRiv3r/dsh-download-dock#readme",
   "bugs": {
-    "url": "https://github.com/imnotRiv3r/dsh-progress/issues"
+    "url": "https://github.com/imnotRiv3r/dsh-download-dock/issues"
   },
   "keywords": [
     "deepseek-harness",
@@ -19,11 +20,16 @@
     "dsh-plugin",
     "cordis",
     "download",
-    "progress"
+    "progress",
+    "hud",
+    "dock"
   ],
   "exports": {
     ".": "./index.js",
-    "./client": "./client.js"
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg",
+    "./package.json": "./package.json"
   },
   "files": [
     "index.js",
@@ -31,6 +37,8 @@
     "lib",
     "test",
     "docs",
+    "locale",
+    "icon.svg",
     "cordis.patch.yml",
     "README.md",
     "README.zh.md",

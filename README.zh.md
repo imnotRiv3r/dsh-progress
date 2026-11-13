@@ -1,7 +1,7 @@
 <p align="right"><a href="README.md">English</a> · <b>中文</b></p>
 
 <p align="center">
-  <img src="docs/banner.svg" width="100%" alt="dsh-progress — 在 DeepSeek Harness 右下角显示实时下载卡片">
+  <img src="docs/banner.svg" width="100%" alt="dsh-download-dock — 在 DeepSeek Harness 右下角显示实时下载卡片">
 </p>
 
 <p align="center">
@@ -31,7 +31,7 @@
 > 你在 Harness 里起了一个 2 GB 的模型下载，命令进了后台。界面右下角什么都没有，任务行只写着「Running」。
 > 你不知道它是在全速下载、被 DNS 卡住、还是早就停了。
 >
-> dsh-progress 把那几十秒变成一张卡片：**文件名、32%、4.14 MB / 12.9 MB、148 KB/s、剩 59s**。
+> dsh-download-dock 把那几十秒变成一张卡片：**文件名、32%、4.14 MB / 12.9 MB、148 KB/s、剩 59s**。
 > 不另开窗口、不改下载命令、不接管任务——它只是观察，然后把观察结果画在你正在看的地方。
 
 ## 目录
@@ -59,7 +59,7 @@
 
 Harness 的下载类命令经常被放进后台任务（`run_in_background: true`），这样它不会锁住当前回合；代价是界面只剩一行任务状态。十几秒后才有一行结束通知，中间发生了什么完全不可见。
 
-dsh-progress 补上的正是这段盲区，并且**只做观察**：
+dsh-download-dock 补上的正是这段盲区，并且**只做观察**：
 
 | 它做 | 它不做 |
 |---|---|
@@ -77,7 +77,7 @@ dsh-progress 补上的正是这段盲区，并且**只做观察**：
 | 元素 | 内容 | 说明 |
 |---|---|---|
 | 工具徽标 | `git` / `py` / `npm` / `a2` / `c` / `w` / `web` / `app` / `rs` / `go` / `dk` | 由识别到的工具决定，渐变底色 + 小号字母 |
-| 标题 | 文件名、仓库名或包名 | `numpy-2.2.6-cp310-win_amd64.whl`、`dsh-progress`、`lodash`；取不到时退化为命令首行前 60 字符 |
+| 标题 | 文件名、仓库名或包名 | `numpy-2.2.6-cp310-win_amd64.whl`、`dsh-download-dock`、`lodash`；取不到时退化为命令首行前 60 字符 |
 | 副标题 | 字节进度或状态文本 | `4.14 MB / 12.9 MB`、`已写入 12.4 MB`、`已完成`、`下载失败`、`已取消`、`正在停止…` |
 | 进度条 | 填充条或流动条纹 | 有总量 → 填充百分比；无总量 → 条纹（见[条纹不是坏掉](#条纹不是坏掉)） |
 | 左下 | 百分比 + 工具名 | 只有工具名时说明处于不确定态 |
@@ -101,7 +101,7 @@ dsh-progress 补上的正是这段盲区，并且**只做观察**：
 插件分成两个半区，它们之间只通过一条只读 JSON 路由通信：
 
 <p align="center">
-  <img src="docs/architecture.svg" width="100%" alt="dsh-progress 数据流：下载工具 → Host 采样 → JSON 状态 → 浏览器卡片">
+  <img src="docs/architecture.svg" width="100%" alt="dsh-download-dock 数据流：下载工具 → Host 采样 → JSON 状态 → 浏览器卡片">
 </p>
 
 | 半区 | 文件 | 运行环境 | 职责 |
@@ -132,7 +132,7 @@ flowchart LR
 4. 若命令里只有一个 HTTP(S) URL，Host 发一次 `HEAD` 读 `content-length`，补上总量。
 5. 每 700 ms 采样一次；只算增量，所以目录里的旧文件不会被算进来。
 6. 任务结束后，Host 继续返回该任务 12 秒（`settledTtlMs`），让浏览器有时间渲染收尾状态。
-7. 浏览器每 600 ms 拉一次 `/plugin/dsh-progress/state`；页面隐藏时暂停轮询。
+7. 浏览器每 600 ms 拉一次 `/plugin/dsh-download-dock/state`；页面隐藏时暂停轮询。
 8. 浏览器把「磁盘字节」和「job 输出里下载器自己报的进度」合并，渲染卡片；结束的卡片在 2.6 秒后淡出。
 
 ## 三条数据通路
@@ -275,10 +275,10 @@ flowchart LR
 ### 方式 A：链接本地目录（适合开发 / 自己改代码）
 
 ```powershell
-git clone https://github.com/imnotRiv3r/dsh-progress.git E:\dshWorkspace\dsh-progress
+git clone https://github.com/imnotRiv3r/dsh-download-dock.git E:\dshWorkspace\dsh-download-dock
 
 # 链接进 profile 的 node_modules（Windows 目录联接，管理员权限一般不需要）
-cmd /c mklink /J "$env:USERPROFILE\.dsh\profiles\desktop\node_modules\dsh-progress" "E:\dshWorkspace\dsh-progress"
+cmd /c mklink /J "$env:USERPROFILE\.dsh\profiles\desktop\node_modules\dsh-download-dock" "E:\dshWorkspace\dsh-download-dock"
 ```
 
 然后在 profile 的 `package.json` 里加依赖和 bundle：
@@ -286,11 +286,11 @@ cmd /c mklink /J "$env:USERPROFILE\.dsh\profiles\desktop\node_modules\dsh-progre
 ```json
 {
   "dependencies": {
-    "dsh-progress": "link:E:/dshWorkspace/dsh-progress"
+    "dsh-download-dock": "link:E:/dshWorkspace/dsh-download-dock"
   },
   "dsh": {
     "profile": {
-      "bundles": ["...", "dsh-progress"]
+      "bundles": ["...", "dsh-download-dock"]
     }
   }
 }
@@ -300,10 +300,10 @@ cmd /c mklink /J "$env:USERPROFILE\.dsh\profiles\desktop\node_modules\dsh-progre
 
 ```powershell
 cd "$env:USERPROFILE\.dsh\profiles\desktop"
-npm install --save "github:imnotRiv3r/dsh-progress"
+npm install --save "github:imnotRiv3r/dsh-download-dock"
 ```
 
-再把 `"dsh-progress"` 加进同一个 `package.json` 的 `dsh.profile.bundles` 数组。仓库没有构建步骤，`exports` 直接指向源码，安装后即可用。
+再把 `"dsh-download-dock"` 加进同一个 `package.json` 的 `dsh.profile.bundles` 数组。仓库没有构建步骤，`exports` 直接指向源码，安装后即可用。
 
 ### 生效顺序
 
@@ -317,7 +317,7 @@ npm install --save "github:imnotRiv3r/dsh-progress"
 
 ```powershell
 # Host 半是否活着（浏览器半挂上后 hits 会持续增长）
-Invoke-RestMethod http://127.0.0.1:2482/plugin/dsh-progress/state
+Invoke-RestMethod http://127.0.0.1:2482/plugin/dsh-download-dock/state
 ```
 
 正常输出长这样：
@@ -337,11 +337,11 @@ curl.exe -L -# --limit-rate 300k -o "$env:TEMP\probe.bin" `
 
 ## 配置
 
-行 id 是 `progress`，在 profile 的 `cordis.patch.yml` 里改：
+行 id 是 `download-dock`，在 profile 的 `cordis.patch.yml` 里改：
 
 ```yaml
-- id: progress
-  name: dsh-progress
+- id: download-dock
+  name: dsh-download-dock
   config:
     enabled: true
     guidePrompt: true
@@ -368,7 +368,7 @@ curl.exe -L -# --limit-rate 300k -o "$env:TEMP\probe.bin" `
 
 ## 状态接口
 
-`GET /plugin/dsh-progress/state` 返回一份只读 JSON 快照（`cache-control: no-store`）：
+`GET /plugin/dsh-download-dock/state` 返回一份只读 JSON 快照（`cache-control: no-store`）：
 
 ```json
 {
@@ -423,7 +423,7 @@ curl.exe -L -# --limit-rate 300k -o "$env:TEMP\probe.bin" `
 |---|---|---|
 | 一张卡片都没有 | 命令不是后台任务 | 用 `run_in_background: true`；前台下载永远不会出卡片 |
 | | 命令不像下载 | 检查命令是否在识别清单内；`npm run build`、`git status` 不算下载 |
-| | 浏览器半没加载 | 刷新页面；确认 `bundles` 里有 `dsh-progress` |
+| | 浏览器半没加载 | 刷新页面；确认 `bundles` 里有 `dsh-download-dock` |
 | | 插件被关闭 | 检查 `enabled`；看 Host 日志是否出现 `disabled by config` |
 | | `webServer` 未就绪 | 插件会以 500 ms 间隔重试 20 次；超时后日志里会有 `webServer never became available` |
 | 卡片有，但字节一直是 0 | 下载不落盘或落到未解析路径 | 命令里显式用 `-o` / `-OutFile`；带 `$var` 的路径要确保能展开成真实绝对路径 |
@@ -460,8 +460,8 @@ curl.exe -L -# --limit-rate 300k -o "$env:TEMP\probe.bin" `
 ## 开发
 
 ```powershell
-git clone https://github.com/imnotRiv3r/dsh-progress.git
-cd dsh-progress
+git clone https://github.com/imnotRiv3r/dsh-download-dock.git
+cd dsh-download-dock
 
 node test/smoke.mjs   # 识别、解析、合并、浏览器半注册；完全离线
 npm run check         # 对每个源文件跑 node --check

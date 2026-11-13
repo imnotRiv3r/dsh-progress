@@ -5,14 +5,14 @@
  * `ctx.webServer.register()` 暴露一个只读 JSON 路由给同源的 Web GUI。
  * 插件只观察 job 注册表，不消费模型游标、不改变任务状态。
  *
- * @module dsh-progress
+ * @module dsh-download-dock
  */
 import z from '@deepseek-ai/schemastery'
 import { DiskSampler } from './lib/sampler.js'
 import { DownloadTracker } from './lib/tracker.js'
 
 /** 状态路由；浏览器半用同一常量拼 URL。 */
-export const STATE_PATH = '/plugin/dsh-progress/state'
+export const STATE_PATH = '/plugin/dsh-download-dock/state'
 
 /** 只需要 job 注册表；提示词与 HTTP 路由都是可选增强。 */
 export const inject = ['jobs']
@@ -54,7 +54,7 @@ export const Config = z.object({
 const PROMPT_ORDER = 9000
 
 /** 提示词段名。 */
-const PROMPT_NAME = 'plugin:dsh-progress/download-guidance'
+const PROMPT_NAME = 'plugin:dsh-download-dock/download-guidance'
 
 /** 引导模型让下载可被观察。 */
 const PROMPT_TEXT = [
@@ -73,7 +73,7 @@ const PROMPT_TEXT = [
 export function apply(ctx, config) {
   const settings = normalizeConfig(config)
   if (!settings.enabled) {
-    ctx.logger.debug('dsh-progress: disabled by config')
+    ctx.logger.debug('dsh-download-dock: disabled by config')
     return
   }
 
@@ -147,13 +147,13 @@ function installStateRoute(ctx, tracker) {
         })
         return
       } catch (error) {
-        ctx.logger.warn(`dsh-progress: cannot register ${STATE_PATH}: ${String(error)}`)
+        ctx.logger.warn(`dsh-download-dock: cannot register ${STATE_PATH}: ${String(error)}`)
         return
       }
     }
     attempts += 1
     if (attempts >= 20) {
-      ctx.logger.warn('dsh-progress: webServer never became available; the progress card stays idle')
+      ctx.logger.warn('dsh-download-dock: webServer never became available; the progress card stays idle')
       return
     }
     timer = setTimeout(attempt, 500)
@@ -188,7 +188,7 @@ function installPrompt(ctx, settings) {
     })
     return typeof dispose === 'function' ? dispose : undefined
   } catch (error) {
-    ctx.logger.warn(`dsh-progress: cannot add system prompt section: ${String(error)}`)
+    ctx.logger.warn(`dsh-download-dock: cannot add system prompt section: ${String(error)}`)
     return undefined
   }
 }

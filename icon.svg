@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="Download dock">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1b1629"/>
+      <stop offset="0.55" stop-color="#121020"/>
+      <stop offset="1" stop-color="#0c0b14"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#c4b5fd"/>
+      <stop offset="0.5" stop-color="#8b5cf6"/>
+      <stop offset="1" stop-color="#6d4aff"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.28" r="0.62">
+      <stop offset="0" stop-color="#7c5cff" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#7c5cff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+  </defs>
+  <rect x="3" y="3" width="122" height="122" rx="30" fill="url(#bg)"/>
+  <rect x="3" y="3" width="122" height="122" rx="30" fill="url(#glow)"/>
+  <rect x="3" y="3" width="122" height="122" rx="30" fill="none" stroke="#ffffff" stroke-opacity="0.12" stroke-width="2"/>
+  <g stroke="#ffffff" stroke-opacity="0.12" stroke-width="2" stroke-linecap="round">
+    <path d="M20 32h10"/>
+    <path d="M98 32h10"/>
+    <path d="M20 40h6"/>
+    <path d="M102 40h6"/>
+  </g>
+  <path d="M64 28v36" stroke="url(#accent)" stroke-width="9" stroke-linecap="round" filter="url(#soft)" opacity="0.7"/>
+  <path d="M64 28v36" stroke="url(#accent)" stroke-width="9" stroke-linecap="round"/>
+  <path d="M43 52l21 23 21-23" fill="none" stroke="url(#accent)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="29" y="91" width="70" height="8" rx="4" fill="#ffffff" fill-opacity="0.12"/>
+  <rect x="29" y="91" width="46" height="8" rx="4" fill="url(#accent)"/>
+  <circle cx="75" cy="95" r="2.6" fill="#ffffff" fill-opacity="0.9"/>
+</svg>
