@@ -313,10 +313,14 @@ npm install --save "github:imnotRiv3r/dsh-download-dock"
 | 浏览器半（`client.js`） | **刷新一次页面** |
 | 配置（`cordis.patch.yml`） | 热加载；浏览器半刷新后拿到新配置 |
 
+### 插件页显示
+
+包内 `locale/zh.json`、`locale/en.json` 提供 `meta.title` 与 `meta.description`，`icon.svg` 是插件页图标（`package.json` 的 `icon` 字段与 `exports` 里的 `./locale/*.json`、`./icon` 一起生效）。安装、改名或更新后刷新一次页面，插件页会显示「下载坞」/「Download dock」及对应图标；若仍显示回退的包名或默认图标，说明宿主还没重新读取包清单，重启 DSH 即可。
+
 ### 验证
 
 ```powershell
-# Host 半是否活着（浏览器半挂上后 hits 会持续增长）
+# Host 半是否活着（浏览器半挂上后 hits 会持续增长；端口以你的 DSH Web 实例为准）
 Invoke-RestMethod http://127.0.0.1:2482/plugin/dsh-download-dock/state
 ```
 

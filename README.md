@@ -313,10 +313,14 @@ Then add `"dsh-download-dock"` to `dsh.profile.bundles` in the same `package.jso
 | Browser half (`client.js`) | **One page refresh** |
 | Config (`cordis.patch.yml`) | Hot reload; the browser half picks it up after a refresh |
 
+### Plugin page
+
+`locale/en.json` and `locale/zh.json` carry `meta.title` and `meta.description`, and `icon.svg` is the plugin-page icon (through the `icon` field in `package.json` plus `./locale/*.json` and `./icon` in `exports`). After install, rename or update, refresh the page once and the plugin page shows "Download dock" / "下载坞" with its icon. If it still falls back to the package name or default artwork, the host has not re-read the package manifest yet — restart DSH.
+
 ### Verify
 
 ```powershell
-# Is the Host half alive? `hits` grows once the browser half attaches.
+# Is the Host half alive? `hits` grows once the browser half attaches (use your DSH Web port).
 Invoke-RestMethod http://127.0.0.1:2482/plugin/dsh-download-dock/state
 ```
 
