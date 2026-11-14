@@ -272,38 +272,39 @@ Prerequisites:
 - Node.js `>= 20`;
 - a working Harness profile (examples below use `desktop`; substitute yours).
 
-### Option A: link a local checkout (development / hacking)
+### From the plugin market
+
+The plugin is listed in the [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin) catalog, so the market inside DeepSeek Harness — [dsh-market](https://github.com/dsh-market/dsh-market), under UI Enhancements — lists it with a one-click **Install**. The market runs exactly the CLI command below, so either entry point ends in the same profile state.
+
+### From the CLI
 
 ```powershell
-git clone https://github.com/imnotRiv3r/dsh-download-dock.git E:\dshWorkspace\dsh-download-dock
-
-# Link it into the profile's node_modules (a Windows directory junction; usually no admin needed)
-cmd /c mklink /J "$env:USERPROFILE\.dsh\profiles\desktop\node_modules\dsh-download-dock" "E:\dshWorkspace\dsh-download-dock"
+dsh plugin --profile desktop add github:imnotRiv3r/dsh-download-dock
 ```
 
-Then add the dependency and the bundle to the profile's `package.json`:
-
-```json
-{
-  "dependencies": {
-    "dsh-download-dock": "link:E:/dshWorkspace/dsh-download-dock"
-  },
-  "dsh": {
-    "profile": {
-      "bundles": ["...", "dsh-download-dock"]
-    }
-  }
-}
-```
-
-### Option B: install from GitHub
+That one command is the whole install: it adds the dependency to the profile's `package.json` and appends `dsh-download-dock` to `dsh.profile.bundles`. There is no npm package — the GitHub source is the only release channel. To pin a commit:
 
 ```powershell
-cd "$env:USERPROFILE\.dsh\profiles\desktop"
-npm install --save "github:imnotRiv3r/dsh-download-dock"
+dsh plugin --profile desktop add github:imnotRiv3r/dsh-download-dock#b2404e2
 ```
 
-Then add `"dsh-download-dock"` to `dsh.profile.bundles` in the same `package.json`. The repo has no build step — `exports` points straight at the source, so it works right after install.
+Uninstall is symmetric — it drops the dependency and the `bundles` row together:
+
+```powershell
+dsh plugin --profile desktop remove dsh-download-dock
+```
+
+The repo has no build step (no `prepare`/`install` script, and `exports` points straight at the source), so the first install does not raise pnpm's `allowBuilds` prompt.
+
+### Link a local checkout (development)
+
+```powershell
+dsh plugin --profile desktop add 'link:E:\dshWorkspace\dsh-download-dock'
+```
+
+The profile now points at your checkout, so edits are live: the Host half hot-reloads with the profile, the browser half needs one page refresh. pnpm warns that a `link:` dependency does not resolve `peerDependencies` from the target — the only one this package declares is `@deepseek-ai/schemastery`, which a DSH profile already provides through `@deepseek-ai/dsh-base`.
+
+Prefer a frozen copy, where edits require re-running the command? Use `file:E:\dshWorkspace\dsh-download-dock` instead of `link:...`.
 
 ### What reloads when
 

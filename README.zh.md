@@ -272,38 +272,39 @@ flowchart LR
 - Node.js `>= 20`；
 - 一个可用的 Harness profile（下面的示例用 `desktop`，按你的实际 profile 名替换）。
 
-### 方式 A：链接本地目录（适合开发 / 自己改代码）
+### 从插件市场安装
+
+本插件已收录进 [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin) 目录，因此在 DeepSeek Harness 内置的插件市场（[dsh-market](https://github.com/dsh-market/dsh-market)，UI 增强分类）里能直接看到它，点一次**安装**即可。市场执行的正是下面这条 CLI 命令，两种入口得到完全相同的 profile 状态。
+
+### 从命令行安装
 
 ```powershell
-git clone https://github.com/imnotRiv3r/dsh-download-dock.git E:\dshWorkspace\dsh-download-dock
-
-# 链接进 profile 的 node_modules（Windows 目录联接，管理员权限一般不需要）
-cmd /c mklink /J "$env:USERPROFILE\.dsh\profiles\desktop\node_modules\dsh-download-dock" "E:\dshWorkspace\dsh-download-dock"
+dsh plugin --profile desktop add github:imnotRiv3r/dsh-download-dock
 ```
 
-然后在 profile 的 `package.json` 里加依赖和 bundle：
-
-```json
-{
-  "dependencies": {
-    "dsh-download-dock": "link:E:/dshWorkspace/dsh-download-dock"
-  },
-  "dsh": {
-    "profile": {
-      "bundles": ["...", "dsh-download-dock"]
-    }
-  }
-}
-```
-
-### 方式 B：从 GitHub 直接安装
+这一条命令就是完整安装：把依赖写进 profile 的 `package.json`，并把 `dsh-download-dock` 追加到 `dsh.profile.bundles`。本插件没有 npm 包，GitHub 源是唯一发布渠道。需要固定 commit 时：
 
 ```powershell
-cd "$env:USERPROFILE\.dsh\profiles\desktop"
-npm install --save "github:imnotRiv3r/dsh-download-dock"
+dsh plugin --profile desktop add github:imnotRiv3r/dsh-download-dock#b2404e2
 ```
 
-再把 `"dsh-download-dock"` 加进同一个 `package.json` 的 `dsh.profile.bundles` 数组。仓库没有构建步骤，`exports` 直接指向源码，安装后即可用。
+卸载是对称的——依赖与 `bundles` 行会一起移除：
+
+```powershell
+dsh plugin --profile desktop remove dsh-download-dock
+```
+
+仓库没有构建步骤（没有 `prepare`/`install` 脚本，`exports` 直接指向源码），所以首次安装不会触发 pnpm 的 `allowBuilds` 审批。
+
+### 链接本地目录（开发）
+
+```powershell
+dsh plugin --profile desktop add 'link:E:\dshWorkspace\dsh-download-dock'
+```
+
+之后 profile 指向你的工作副本，改动即时生效：Host 半随 profile 热加载，浏览器半需要刷新一次页面。pnpm 会警告 `link:` 依赖不会从目标解析 `peerDependencies`——本包只声明了 `@deepseek-ai/schemastery`，而 DSH profile 已通过 `@deepseek-ai/dsh-base` 提供它。
+
+如果你想要一份冻结的副本（改动后需重跑命令），把 `link:...` 换成 `file:E:\dshWorkspace\dsh-download-dock`。
 
 ### 生效顺序
 
