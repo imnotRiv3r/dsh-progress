@@ -1,7 +1,7 @@
 <p align="right"><b>English</b> · <a href="README.zh.md">中文</a></p>
 
 <p align="center">
-  <img src="docs/banner.svg" width="100%" alt="dsh-download-dock — live download cards in the corner of the DeepSeek Harness UI">
+  <img src="https://raw.githubusercontent.com/imnotRiv3r/dsh-download-dock/main/docs/banner.svg" width="100%" alt="dsh-download-dock — live download cards in the corner of the DeepSeek Harness UI">
 </p>
 
 <p align="center">
@@ -20,8 +20,8 @@
 ---
 
 <p align="center">
-  <img src="docs/card-fill.png" width="46%" alt="A card with a known total: 32% · curl">
-  <img src="docs/card-stripes.png" width="46%" alt="An indeterminate card: moving stripes, bytes written">
+  <img src="https://raw.githubusercontent.com/imnotRiv3r/dsh-download-dock/main/docs/card-fill.png" width="46%" alt="A card with a known total: 32% · curl">
+  <img src="https://raw.githubusercontent.com/imnotRiv3r/dsh-download-dock/main/docs/card-stripes.png" width="46%" alt="An indeterminate card: moving stripes, bytes written">
 </p>
 
 <p align="center">
@@ -101,7 +101,7 @@ The `✕` button only removes the card from the current page — **it never stop
 The plugin is split into two halves that talk over a single read-only JSON route:
 
 <p align="center">
-  <img src="docs/architecture.svg" width="100%" alt="dsh-download-dock data flow: download tools → Host sampling → JSON state → browser card">
+  <img src="https://raw.githubusercontent.com/imnotRiv3r/dsh-download-dock/main/docs/architecture.svg" width="100%" alt="dsh-download-dock data flow: download tools → Host sampling → JSON state → browser card">
 </p>
 
 | Half | Files | Runtime | Responsibility |

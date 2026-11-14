@@ -1,7 +1,7 @@
 <p align="right"><a href="README.md">English</a> · <b>中文</b></p>
 
 <p align="center">
-  <img src="docs/banner.svg" width="100%" alt="dsh-download-dock — 在 DeepSeek Harness 右下角显示实时下载卡片">
+  <img src="https://raw.githubusercontent.com/imnotRiv3r/dsh-download-dock/main/docs/banner.svg" width="100%" alt="dsh-download-dock — 在 DeepSeek Harness 右下角显示实时下载卡片">
 </p>
 
 <p align="center">
@@ -20,8 +20,8 @@
 ---
 
 <p align="center">
-  <img src="docs/card-fill.png" width="46%" alt="知道总量时的下载卡片：32% · curl">
-  <img src="docs/card-stripes.png" width="46%" alt="不确定态卡片：条纹流动，显示已写入字节">
+  <img src="https://raw.githubusercontent.com/imnotRiv3r/dsh-download-dock/main/docs/card-fill.png" width="46%" alt="知道总量时的下载卡片：32% · curl">
+  <img src="https://raw.githubusercontent.com/imnotRiv3r/dsh-download-dock/main/docs/card-stripes.png" width="46%" alt="不确定态卡片：条纹流动，显示已写入字节">
 </p>
 
 <p align="center">
@@ -101,7 +101,7 @@ dsh-download-dock 补上的正是这段盲区，并且**只做观察**：
 插件分成两个半区，它们之间只通过一条只读 JSON 路由通信：
 
 <p align="center">
-  <img src="docs/architecture.svg" width="100%" alt="dsh-download-dock 数据流：下载工具 → Host 采样 → JSON 状态 → 浏览器卡片">
+  <img src="https://raw.githubusercontent.com/imnotRiv3r/dsh-download-dock/main/docs/architecture.svg" width="100%" alt="dsh-download-dock 数据流：下载工具 → Host 采样 → JSON 状态 → 浏览器卡片">
 </p>
 
 | 半区 | 文件 | 运行环境 | 职责 |
